@@ -102,6 +102,25 @@ uint16_t random_level(uint32_t num, float prob) {
 	return v;
 }
 
+bool skip_list_update_header(skip_list *list) {
+	if (list == NULL || list->header == NULL) {
+		return false;
+	}
+	if (list->level == list->header->level) {
+		return true;
+	}
+
+	skip_list_node **next_nodes = (skip_list_node **)realloc(list->header->next_nodes, list->level * sizeof(skip_list_node *));
+	if (next_nodes == NULL) {
+		return false;
+	}
+
+	list->header->level = list->level;
+	list->header->next_nodes = next_nodes;
+
+	return true;
+}
+
 bool skip_list_insert(skip_list *list, key_type search_key, value_type new_value) {
 	skip_list_node **update = (skip_list_node **)malloc(list->level * sizeof(skip_list_node *));
 	if (update == NULL) {
@@ -141,7 +160,12 @@ bool skip_list_insert(skip_list *list, key_type search_key, value_type new_value
 	}
 
 	list->level = v;
-	list->header->level = list->level;
+	bool ret = skip_list_update_header(list);
+	if (!ret) {
+		free(update);
+		return false;
+	}
+	//list->header->level = list->level;
 	for (i = 0; i < list->level; ++i) {
 		x->next_nodes[i] = update[i]->next_nodes[i];
 		update[i]->next_nodes[i] = x;
@@ -183,6 +207,8 @@ bool skip_list_delete(skip_list *list, key_type search_key) {
 	while (list->level > 2 && list->header->next_nodes[list->level - 1] == NULL) {
 		list->level--;
 	}
+	skip_list_update_header(list);
+	//list->header->level = list->level;
 	list->elem_num--;
 
 	return true;

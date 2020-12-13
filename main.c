@@ -74,59 +74,97 @@ int main(void) {
 	uint32_t g_key = 7;
 	char *g_value = "it";
 
+	uint32_t h_key = 8;
+	char *h_value = "me";
+
+	uint32_t i_key = 9;
+	char *i_value = "him";
+
+	uint32_t j_key = 10;
+	char *j_value = "my";
+
+	uint32_t k_key = 11;
+	char *k_value = "her";
+
 	test_search(list, a_key);
 	printf("\n");
 
 	test_insert(list, b_key, b_value);
 	printf("\n");
+
 	show_skip_list_level(list, 0);
-	printf("\n");
-	show_skip_list_level(list, 1);
 	printf("\n");
 
 	test_insert(list, a_key, a_value);
 	printf("\n");
+
 	test_insert(list, c_key, c_value);
 	printf("\n");
 
 	show_skip_list_level(list, 0);
-	printf("\n");
 	show_skip_list_level(list, 1);
+	show_skip_list_level(list, 2);
 	printf("\n");
 
 	test_insert(list, d_key, d_value);
 	printf("\n");
+
 	test_insert(list, e_key, e_value);
 	printf("\n");
+
 	show_skip_list_level(list, 0);
-	printf("\n");
+	show_skip_list_level(list, 1);
 	show_skip_list_level(list, 2);
 	printf("\n");
 
 	test_search(list, a_key);
 	printf("\n");
+
 	test_search(list, c_key);
 	printf("\n");
+
 	test_search(list, e_key);
 	printf("\n");
 
 	test_insert(list, g_key, g_value);
 	printf("\n");
+
 	test_insert(list, f_key, f_value);
 	printf("\n");
+
 	show_skip_list_level(list, 0);
-	printf("\n");
+	show_skip_list_level(list, 1);
 	show_skip_list_level(list, 2);
+	show_skip_list_level(list, 3);
 	printf("\n");
 
 	test_delete(list, c_key);
 	printf("\n");
+
+	test_insert(list, h_key, h_value);
+	printf("\n");
+
+	test_insert(list, i_key, i_value);
+	printf("\n");
+
+	test_insert(list, j_key, j_value);
+	printf("\n");
+
+	test_insert(list, k_key, k_value);
+	printf("\n");
+
 	show_skip_list_level(list, 0);
 	printf("\n");
+
 	show_skip_list_level(list, 1);
 	printf("\n");
+
+	test_insert(list, c_key, c_value);
+	printf("\n");
+
 	show_skip_list_level(list, 2);
 	printf("\n");
+
 	show_skip_list_level(list, 3);
 	printf("\n");
 
