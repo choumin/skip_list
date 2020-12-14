@@ -29,9 +29,11 @@ void skip_list_node_free(skip_list_node *node) {
 	if (node == NULL) {
 		return;
 	}
+
 	if (node->next_nodes) {
 		free(node->next_nodes);
 	}
+
 	free(node);
 }
 
@@ -71,6 +73,7 @@ bool skip_list_search(skip_list *list, key_type search_key, value_type *out) {
 			x = x->next_nodes[i];
 		}
 	}
+
 	x = x->next_nodes[0];
 	if (x == NULL || !key_eq(x->key, search_key)) {
 		return false;
@@ -106,6 +109,7 @@ bool skip_list_update_header(skip_list *list) {
 	if (list == NULL || list->header == NULL) {
 		return false;
 	}
+
 	if (list->level == list->header->level) {
 		return true;
 	}
@@ -136,9 +140,11 @@ bool skip_list_insert(skip_list *list, key_type search_key, value_type new_value
 		}
 		update[i] = x;
 	}
+
 	x = x->next_nodes[0];
 	if (x && key_eq(x->key, search_key)) {
 		x->value = new_value;
+		free(update);
 		return true;
 	}
 
@@ -153,6 +159,7 @@ bool skip_list_insert(skip_list *list, key_type search_key, value_type new_value
 			update[i] = list->header;
 		}
 	}
+
 	x = skip_list_node_create(v, search_key, new_value);
 	if (x == NULL) {
 		free(update);
@@ -165,7 +172,7 @@ bool skip_list_insert(skip_list *list, key_type search_key, value_type new_value
 		free(update);
 		return false;
 	}
-	//list->header->level = list->level;
+
 	for (i = 0; i < list->level; ++i) {
 		x->next_nodes[i] = update[i]->next_nodes[i];
 		update[i]->next_nodes[i] = x;
@@ -191,9 +198,10 @@ bool skip_list_delete(skip_list *list, key_type search_key) {
 		}
 		update[i] = x;
 	}
-	x = x->next_nodes[0];
 
+	x = x->next_nodes[0];
 	if (x == NULL || !key_eq(x->key, search_key)) {
+		free(update);
 		return false;
 	}
 
@@ -204,13 +212,14 @@ bool skip_list_delete(skip_list *list, key_type search_key) {
 		update[i]->next_nodes[i] = x->next_nodes[i];
 	}
 	skip_list_node_free(x);
+
 	while (list->level > 2 && list->header->next_nodes[list->level - 1] == NULL) {
 		list->level--;
 	}
 	skip_list_update_header(list);
-	//list->header->level = list->level;
 	list->elem_num--;
 
+	free(update);
 	return true;
 }
 
@@ -218,8 +227,10 @@ void skip_list_destroy(skip_list *list) {
 	if (list == NULL || list->header) {
 		return;
 	}
+
 	skip_list_node *x = list->header;
 	skip_list_node *y = NULL;
+
 	while (x) {
 		y = x->next_nodes[0];
 		skip_list_node_free(x);
