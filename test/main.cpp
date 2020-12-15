@@ -1,5 +1,11 @@
+#include <iostream>
 #include <stdio.h>
+#include <list>
+extern "C"{
 #include "skip_list.h"
+}
+
+using namespace std;
 
 void test_search(skip_list *list, uint32_t key) {
 	char *p = NULL;
@@ -46,7 +52,7 @@ void show_skip_list_level(skip_list *list, uint16_t level) {
 	printf(")\n");
 }
 
-int main(void) {
+int test_basic(void) {
 	float prob = 0.5;
 	skip_list *list = skip_list_create(prob);
 	if (list == NULL) {
@@ -173,3 +179,21 @@ int main(void) {
 	return 0;
 }
 
+void test_stl_list(void) {
+	std::list<double> values;
+	values.push_back(3.1);
+    values.push_back(2.2);
+    values.push_back(2.9);
+ 	cout << "values size：" << values.size() << endl;
+	values.sort();
+	for (std::list<double>::iterator it = values.begin(); it != values.end(); ++it) {
+        std::cout << *it << " ";
+    }
+	cout << endl;
+}
+
+int main(void) {
+	printf("waiting to finish ...\n");
+
+    return 0;	
+}

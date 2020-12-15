@@ -1,19 +1,31 @@
-CC=gcc
-ROOT_DIR=$(shell pwd)
-CFLAG=-I$(ROOT_DIR)
-MAIN_BIN=main
+CC = gcc
+C++ = g++
+LINK = g++
+ROOT_DIR = $(shell cd .. && pwd)
+CFLAG = -I$(ROOT_DIR)
+MAIN_BIN = main
 
-CUR_SOURCE=${wildcard *.c}
-CUR_OBJS=${patsubst %.c, %.o, $(CUR_SOURCE)}
+#$(warning $(ROOT_DIR))
 
-all:$(CUR_OBJS) $(MAIN_BIN)
+CFILES=${wildcard $(ROOT_DIR)/*.c}
+CPPFILES=${wildcard *.cpp}
 
-$(CUR_OBJS):%.o:%.c
-	$(CC) -c $^ $(CFLAG)
+OBJFILES = $(CFILES:.c=.o) $(CPPFILES:.cpp=.o)
 
-$(MAIN_BIN):$(CUR_OBJS)
-	$(CC) $^ -o $@
+#$(warning $(OBJFILES))
+#$(warning $(C++))
+
+all:$(OBJFILES) $(MAIN_BIN)
+
+%.o:%.c
+	$(CC) -c $^ $(CFLAG) -o $@
+
+%.o:%.cpp
+	$(C++) -c $^ $(CFLAG) -o $@
+
+$(MAIN_BIN):$(OBJFILES)
+	$(LINK) $^ -o $@
 
 
 clean:
-	@rm	$(ROOT_DIR)/*.o
+	@rm $(OBJFILES)
